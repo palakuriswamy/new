@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    database: DBT
+    schema: RAW         # must match Snowflake schema exactly
+    tables:
+      - name: customers  # must match table name exactly
+      - name: orders

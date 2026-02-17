@@ -1,0 +1,25 @@
+# dbt_project.yml
+
+name: 'swamy_project'       # project name: lowercase & underscores only
+version: '1.0.0'
+profile: 'swamy_project'    # must match your profiles.yml key exactly
+
+# Paths
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model configurations
+models:
+  swamy_project:           # must match project name
+    staging:               # folder: models/staging/
+      +materialized: view  # all staging models will be views
+    marts:                 # folder: models/marts/
+      +materialized: table # all marts models will be tables
