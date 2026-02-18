@@ -1,0 +1,121 @@
+version: 2
+
+models:
+
+  - name: stg_customers
+    description: "Staging model for customers"
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        tests:
+          - not_null
+      - name: last_name
+        tests:
+          - not_null
+      - name: email
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_match_regex:
+              arguments:
+                regex: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+      - name: city
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Staging model for orders"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        tests:
+          - not_null
+      - name: price
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: quantity
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 1
+                max_value: 1000
+      - name: status
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments:
+                value_set: ['Delivered', 'Shipped', 'Processing', 'Cancelled']
+
+  - name: stg_payments
+    description: "Staging model for payments"
+    columns:
+      - name: payment_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - not_null
+      - name: amount
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: status
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments:
+                value_set: ['Completed', 'Pending', 'Refunded']
+
+  - name: stg_products
+    description: "Staging model for products"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - unique
+      - name: product_name
+        tests:
+          - not_null
+      - name: price
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: stock
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 10000
+
+  - name: stg_returns
+    description: "Staging model for returns"
+    columns:
+      - name: return_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - not_null
+      - name: return_date
+        tests:
+          - not_null
+      

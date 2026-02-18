@@ -1,20 +1,19 @@
 with source as (
 
     select * 
-    from {{ source('raw', 'orders') }}
+    from {{ source('raw', 'products') }}
 
 ),
 
 cleaned as (
 
     select
-        order_id,
-        customer_id,
-        order_date,
+        product_id,
         product_name,
-        quantity,
+        category,
         price,
-        status
+        stock,
+        created_date
 
     from source
 

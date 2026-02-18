@@ -7,3 +7,7 @@ sources:
     tables:
       - name: customers  # must match table name exactly
       - name: orders
+      - name: products
+      - name: payments
+      - name: returns
+
